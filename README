@@ -1,0 +1,30 @@
+h1. Partially Valid Rails Plugin
+
+PartiallyValid allows you to valid an ActiveRecord model when only a subset of the models attributes are valid. This is particularly useful when using a wizard-like UI to build up a model in stages. 
+
+h1. Example
+
+Assume, for the purposes of this example that the name, age and phone number fields of a person model are required.
+
+  bill = Person.new
+  bill.partially_valid?  #=> true (no fields are checked at this point)
+
+  bill.should_be_partially_valid_on :name, :address
+  bill.partially_valid?  #=> false (name and address are invalid)
+
+  bill.name = "Bill"
+  bill.address = "Home Address"
+  bill.partially_valid?  #=> true  (now name and address are valid)
+
+  bill.should_be_partially_valid_on :phone_number
+  bill.partially_valid?  #=> false  (fails now because phone number is checked)
+
+h2. Notes
+
+After invoking :partially_valid?, the errors object will contain
+only errors referencing attributes declared to be considered for
+partial validation.
+
+The list of partially valid attributes are stored on the object itself.  The object may be marshalled into session data and restored and will remember the attributes that have been declared to be checked for validity.  However, the list of valid attributes are not persisted to the database.  Generally, this is not a problem, because a model that is only partially valid cannot be saved to the database anyways.
+
+The :valid? method continues to work as before.
