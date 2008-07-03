@@ -34,5 +34,5 @@ The :valid? method continues to work as before.
 
 h3. Requirements
 
-The flexmock plugin.
+The flexmock gem.
 	> gem install flexmock
