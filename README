@@ -19,6 +19,9 @@ Assume, for the purposes of this example that the name, age and phone number fie
   bill.should_be_partially_valid_on :phone_number
   bill.partially_valid?  #=> false  (fails now because phone number is checked)
 
+  bill.should_be_partially_valid_except :phone_number
+  bill.partially_valid?  #=> true  (passes now because phone number is not checked)
+
 h2. Notes
 
 After invoking :partially_valid?, the errors object will contain
@@ -28,3 +31,8 @@ partial validation.
 The list of partially valid attributes are stored on the object itself.  The object may be marshalled into session data and restored and will remember the attributes that have been declared to be checked for validity.  However, the list of valid attributes are not persisted to the database.  Generally, this is not a problem, because a model that is only partially valid cannot be saved to the database anyways.
 
 The :valid? method continues to work as before.
+
+h3. Requirements
+
+The flexmock plugin.
+	> gem install flexmock

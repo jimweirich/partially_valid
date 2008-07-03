@@ -41,6 +41,21 @@ module PartiallyValid
     partially_valid_attributes.uniq!
   end
   
+  # Declare that the list of attributes that should not be added to the list
+  # checked for partial validation. The attribute names may be
+  # strings or symbols. All other attributes will be validated.
+  def should_be_partially_valid_except(*attrs)
+    invalid_attributes = []
+    all_attrs = self.instance_variables.map {|iv| iv.gsub('@','')}
+    # use the key names from @attributes for ActiveRecord objects
+    all_attrs = self.attributes.keys if self.instance_variables.include?('attributes')
+    attrs.each do |attr_name|
+      invalid_attributes << attr_name.to_s
+    end
+    should_be_valid_on = all_attrs - invalid_attributes
+    should_be_partially_valid_on(should_be_valid_on)
+  end
+
   # Is the model valid on the attributes declared to be checked for
   # partial validation? Errors on non-checked attributes are removed
   # from the error list not not considered as errors for the purpose
